@@ -1,0 +1,85 @@
+Provides a new Assetic filter for CSS files which allows you the "@MyBundle" syntax in your CSS.
+
+Sample:
+``background: #fff url(@MyBundle/Resources/public/images/backgrounds.png) 0 0 no-repeat;``
+
+It also converts all images to assets and allows you to use an existing asset filter for it (like optipng for pngs)
+
+Installation
+============
+
+Add SmurfyAsseticCssBundleImagesBundle to your vendor/bundles/ dir
+---------------------------------------------
+
+Add the following lines in your ``deps`` file::
+
+    [SmurfyAsseticCssBundleImagesBundle]
+        git=git://github.com/smurfy/SmurfyAsseticCssBundleImagesBundle.git
+        target=bundles/Smurfy/AsseticCssBundleImagesBundle
+
+Run the vendors script::
+
+    ./bin/vendors install
+
+Add the Smurfy namespace to your autoloader
+----------------------------------------
+
+    // app/autoload.php
+    $loader->registerNamespaces(array(
+        'Smurfy' => __DIR__.'/../vendor/bundles',
+        // your other namespaces
+    );
+
+Add SmurfyAsseticCssBundleImagesBundle to your application kernel
+-----------------------------------------
+
+    // app/AppKernel.php
+
+    public function registerBundles()
+    {
+        return array(
+            new Symfony\Bundle\SecurityBundle\SecurityBundle(),
+            // ...
+            new Smurfy\AsseticCssBundleImagesBundle\SmurfyAsseticCssBundleImagesBundle(),
+            // ...
+        );
+    }
+    
+Configuration
+=============
+
+By default the filter outputs all files to /assetic/ but you can change that, also you can specify which filter should be used by extention.
+
+    smurfy_assetic_css_bundle_images:
+        output: assetic/*
+        absolute: true
+        filters:
+            png:
+                - optipng
+            jpg:
+                - jpegoptim
+
+
+Sample Usage
+============
+
+In your twig template enable the filter
+
+    {% stylesheets
+        '@MyBundle/Resources/public/css/*' filter='cssbundleimages' output='assetic/*.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+    
+After that you can use inside your css file something like that:
+
+    .body {
+        background: #fff url(@MyBundle/Resources/public/images/backgrounds.png) top left repeat-x;
+        height: 115px;
+    }
+    
+Final Notes
+===========
+
+Assetic Controller support is working but it always rescans all css files which of course is not so fast.
+For my Project its ok but it could be a bottleneck in a large development environment.
