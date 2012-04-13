@@ -10,6 +10,7 @@
 namespace Smurfy\AsseticCssBundleImagesBundle\Assetic\Resource;
 
 use Assetic\Factory\Resource\ResourceInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Finder\Finder;
 
@@ -22,23 +23,26 @@ class CssBundleImagesResource implements ResourceInterface
     private $options;
     private $filters;
     private $af;
+    private $container;
     private $files;
     private $sourceFiles;
     
     /**
      * Constructor.
      *
-     * @param KernelInterface $kernel   The kernel is used to parse bundle notation
-     * @param AssetFactory    $af       Assetic Factory
-     * @param array           $options  Options for this filter
-     * @param array           $filters  Additional filters for embeded images
+     * @param KernelInterface    $kernel    The kernel is used to parse bundle notation
+     * @param AssetFactory       $af        Assetic Factory
+     * @param ContainerInterface $container The Service Container
+     * @param array              $options   Options for this filter
+     * @param array              $filters   Additional filters for embeded images
      * 
      * @return void
      */
-    public function __construct(KernelInterface $kernel, $af, $options = array(), $filters = array())
+    public function __construct(KernelInterface $kernel, $af, ContainerInterface $container, $options = array(), $filters = array())
     {
         $this->kernel = $kernel;
         $this->af = $af;
+        $this->container = $container;
         $this->options = $options;
         $this->filters = $filters;
     }
@@ -164,6 +168,8 @@ class CssBundleImagesResource implements ResourceInterface
                 }
             }
         }
+        
+        $files = array_values(array_unique($files));
         $this->files = $files;
         $this->sourceFiles = $sourceFiles;
     }
@@ -178,24 +184,38 @@ class CssBundleImagesResource implements ResourceInterface
     private function _getFilesInCss($cssFile)
     {
         $content = file_get_contents($cssFile);
-        $kernel = $this->kernel;
         $files = array();
         
         preg_match_all('/url\((["\']?)(?<url>.*?)(\\1)\)/', $content, $matches);
         foreach ($matches['url'] as $url) {
+            $file = null;
+            
+            $fileUrl = $this->container->getParameterBag()->resolveValue($url);
+            if ($fileUrl != $url) {
+                if ('@' == $fileUrl[0] && false !== strpos($fileUrl, '/')) {
+                    $url = $fileUrl;
+                } else {
+                    if (file_exists($fileUrl)) {
+                        $file = realpath($fileUrl);
+                    }
+                }
+            }
+            
             if ('@' == $url[0] && false !== strpos($url, '/')) {
                 $bundle = substr($url, 1);
                 if (false !== $pos = strpos($bundle, '/')) {
                     $bundle = substr($bundle, 0, $pos);
                 }
                 try {
-                    $file = $kernel->locateResource($url);
-                    $files[] = $file;
+                    $file = $this->kernel->locateResource($url);
                 } catch (\Exception $e) {
                 }
             }
+            
+            if ($file) {
+                $files[] = $file;
+            }
         }
-        
         return $files;
     }
 

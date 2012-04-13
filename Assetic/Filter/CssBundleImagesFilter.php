@@ -30,24 +30,27 @@ class CssBundleImagesFilter extends BaseCssFilter
     private $filters;
     private $af;
     private $baseUrl;
+    private $container;
     
     /**
      * Constructor.
      *
-     * @param KernelInterface $kernel   The kernel is used to parse bundle notation
-     * @param AssetFactory    $af       Assetic Factory
-     * @param Router          $router   The Router
-     * @param array           $options  Options for this filter
-     * @param array           $filters  Additional filters for embeded images
+     * @param KernelInterface    $kernel    The kernel is used to parse bundle notation
+     * @param AssetFactory       $af        Assetic Factory
+     * @param Router             $router    The Router
+     * @param ContainerInterface $container The Service Container
+     * @param array              $options   Options for this filter
+     * @param array              $filters   Additional filters for embeded images
      * 
      * @return void
      */
-    public function __construct(KernelInterface $kernel, $af, Router $router, $options = array(), $filters = array())
+    public function __construct(KernelInterface $kernel, $af, Router $router, ContainerInterface $container, $options = array(), $filters = array())
     {
         $this->kernel = $kernel;
         $this->options = $options;
         $this->filters = $filters;
         $this->af = $af;
+        $this->container = $container;
         $this->baseUrl = $router->getContext()->getBaseUrl();;
     }
     
@@ -88,10 +91,30 @@ class CssBundleImagesFilter extends BaseCssFilter
         $af = $this->af;
         $options = $this->options;
         $filters = $this->filters;
+        $container = $this->container;
         
-        $content = $this->filterUrls($asset->getContent(), function($matches) use($kernel, $af, $baseUrl, $options, $filters)
+        $content = $this->filterUrls($asset->getContent(), function($matches) use($kernel, $af, $baseUrl, $options, $filters, $container)
         {
             $url = $matches['url'];
+            $file = null;
+            
+            $fileUrl = $container->getParameterBag()->resolveValue($url);
+            if ($fileUrl != $url) {
+                if ('@' == $fileUrl[0] && false !== strpos($fileUrl, '/')) {
+                    $url = $fileUrl;
+                } else {
+                    if (file_exists($fileUrl)) {
+                        $file = realpath($fileUrl);
+                    } else {
+                        if ($options['debug']) {
+                            $url = sprintf('/* File %s not found */', $fileUrl);
+                        } else {
+                            $url = '/* missing */';
+                        }
+                    }
+                }
+            }
+            
             if ('@' == $url[0] && false !== strpos($url, '/')) {
                 $bundle = substr($url, 1);
                 if (false !== $pos = strpos($bundle, '/')) {
@@ -100,14 +123,6 @@ class CssBundleImagesFilter extends BaseCssFilter
                 
                 try {
                     $file = $kernel->locateResource($url);
-                    $ext = pathinfo($file, PATHINFO_EXTENSION);
-                    $assetFilters = array();
-                    if (isset($filters[$ext])) {
-                        $assetFilters = $filters[$ext];
-                    }
-                    $id = $af->generateAssetName($file, $assetFilters, $options);
-                    $path = str_replace('*', $id, $options['output']) . '.' . $ext;
-                    $url = $baseUrl . ($options['absolute'] ? '/' : '') . $path;
                 } catch (\Exception $e) {
                     if ($options['debug']) {
                         $subUrl = substr($url, strlen($bundle) + 11);
@@ -116,8 +131,19 @@ class CssBundleImagesFilter extends BaseCssFilter
                         $url = '/* missing */';
                     }
                 }
-                
             }
+            
+            if (isset($file)) {
+                $ext = pathinfo($file, PATHINFO_EXTENSION);
+                $assetFilters = array();
+                if (isset($filters[$ext])) {
+                    $assetFilters = $filters[$ext];
+                }
+                $id = $af->generateAssetName($file, $assetFilters, $options);
+                $path = str_replace('*', $id, $options['output']) . '.' . $ext;
+                $url = $baseUrl . ($options['absolute'] ? '/' : '') . $path;
+            }
+            
             return str_replace($matches['url'], $url, $matches[0]);
         });
         $asset->setContent($content);

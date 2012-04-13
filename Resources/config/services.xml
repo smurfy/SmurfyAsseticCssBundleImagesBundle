@@ -15,6 +15,7 @@
             <argument type="service" id="kernel" />
             <argument type="service" id="assetic.asset_factory" />
             <argument type="service" id="router" />
+            <argument type="service" id="service_container" />
             <argument type="collection">
                 <argument key="root">%assetic.write_to%</argument>
                 <argument key="debug">%assetic.debug%</argument>
@@ -40,6 +41,7 @@
             <tag name="assetic.formula_resource" loader="cssbundleimages" />
             <argument type="service" id="kernel" />
             <argument type="service" id="assetic.asset_factory" />
+            <argument type="service" id="service_container" />
             <argument type="collection">
                 <argument key="root">%assetic.write_to%</argument>
                 <argument key="debug">%assetic.debug%</argument>
