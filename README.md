@@ -2,11 +2,20 @@ Provides a new Assetic filter for CSS files which allows you the "@MyBundle" syn
 It also exposes DI Container parameters to the CSS File
 
 Example 1 - Using the @MyBundle syntax:
+---------------------------------------
+
 ``background: url(@MyBundle/Resources/public/images/backgrounds.png);``
+
 Example 2 - Using the DI Container syntax:
+------------------------------------------
+
 ``background: url(%kernel.root_dir%/../vendor/twitter/bootstrap/img/sprite-map.png);``
+
 Example 3 - You even can combine both:
+--------------------------------------
+
 ``background: url(@MyBundle/Resources/public/images/%site.mood%/backgrounds.png);``
+
 
 It also converts all images to assets and allows you to use an existing asset filter for it (like optipng for pngs)
 
@@ -14,7 +23,7 @@ Installation
 ============
 
 Add SmurfyAsseticCssBundleImagesBundle to your vendor/bundles/ dir
----------------------------------------------
+-------------------------------------------------------------------
 
 Add the following lines in your ``deps`` file::
 
@@ -27,7 +36,7 @@ Run the vendors script::
     ./bin/vendors install
 
 Add the Smurfy namespace to your autoloader
-----------------------------------------
+-------------------------------------------
 
     // app/autoload.php
     $loader->registerNamespaces(array(
@@ -36,7 +45,7 @@ Add the Smurfy namespace to your autoloader
     );
 
 Add SmurfyAsseticCssBundleImagesBundle to your application kernel
------------------------------------------
+-----------------------------------------------------------------
 
     // app/AppKernel.php
 
