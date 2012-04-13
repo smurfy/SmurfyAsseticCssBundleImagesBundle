@@ -1,7 +1,12 @@
 Provides a new Assetic filter for CSS files which allows you the "@MyBundle" syntax in your CSS.
+It also exposes DI Container parameters to the CSS File
 
-Sample:
-``background: #fff url(@MyBundle/Resources/public/images/backgrounds.png) 0 0 no-repeat;``
+Example 1 - Using the @MyBundle syntax:
+``background: url(@MyBundle/Resources/public/images/backgrounds.png);``
+Example 2 - Using the DI Container syntax:
+``background: url(%kernel.root_dir%/../vendor/twitter/bootstrap/img/sprite-map.png);``
+Example 3 - You even can combine both:
+``background: url(@MyBundle/Resources/public/images/%site.mood%/backgrounds.png);``
 
 It also converts all images to assets and allows you to use an existing asset filter for it (like optipng for pngs)
 
@@ -59,7 +64,6 @@ By default the filter outputs all files to /assetic/ but you can change that, al
             jpg:
                 - jpegoptim
 
-
 Sample Usage
 ============
 
@@ -74,8 +78,7 @@ In your twig template enable the filter
 After that you can use inside your css file something like that:
 
     .body {
-        background: #fff url(@MyBundle/Resources/public/images/backgrounds.png) top left repeat-x;
-        height: 115px;
+        background: url(@MyBundle/Resources/public/images/backgrounds.png);
     }
     
 Final Notes
