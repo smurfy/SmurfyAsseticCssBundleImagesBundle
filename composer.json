@@ -1,0 +1,17 @@
+{
+    "name": "smurfy/asseticcssbundleimages-bundle",
+    "version": "1.0.0",
+    "homepage": "https://github.com/smurfy/SmurfyAsseticCssBundleImagesBundle",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.3.0",
+        "symfony/framework-bundle": "2.*",
+        "symfony/assetic-bundle": "2.1.*",
+        "kriswallsmith/assetic": ">=1.1.0-dev"
+    },
+    "autoload": {
+        "psr-0": { "Smurfy\\AsseticCssBundleImagesBundle\\SmurfyAsseticCssBundleImagesBundle": "" }
+    },
+    "target-dir": "bundles/Smurfy/AsseticCssBundleImagesBundle"
+}
