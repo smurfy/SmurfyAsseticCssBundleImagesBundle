@@ -1,5 +1,6 @@
 {
     "name": "smurfy/asseticcssbundleimages-bundle",
+    "description": "Allows you to use the @bundle syntax in your css files",
     "version": "1.0.0",
     "homepage": "https://github.com/smurfy/SmurfyAsseticCssBundleImagesBundle",
     "type": "symfony-bundle",
@@ -12,6 +13,5 @@
     },
     "autoload": {
         "psr-0": { "Smurfy\\AsseticCssBundleImagesBundle\\SmurfyAsseticCssBundleImagesBundle": "" }
-    },
-    "target-dir": "bundles/Smurfy/AsseticCssBundleImagesBundle"
+    }
 }
