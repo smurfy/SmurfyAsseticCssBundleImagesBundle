@@ -13,5 +13,6 @@
     },
     "autoload": {
         "psr-0": { "Smurfy\\AsseticCssBundleImagesBundle\\SmurfyAsseticCssBundleImagesBundle": "" }
-    }
+    },
+    "target-dir": "Smurfy/AsseticCssBundleImagesBundle"
 }
