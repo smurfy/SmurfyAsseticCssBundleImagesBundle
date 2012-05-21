@@ -44,6 +44,7 @@
             <argument type="service" id="service_container" />
             <argument type="collection">
                 <argument key="root">%assetic.write_to%</argument>
+                <argument key="bundles">%assetic.bundles%</argument>
                 <argument key="debug">%assetic.debug%</argument>
                 <argument key="output">%smurfy.assetic.output%</argument>
                 <argument key="absolute">%smurfy.assetic.absolute%</argument>

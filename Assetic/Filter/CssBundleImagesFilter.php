@@ -125,7 +125,7 @@ class CssBundleImagesFilter extends BaseCssFilter
                     $file = $kernel->locateResource($url);
                 } catch (\Exception $e) {
                     if ($options['debug']) {
-                        $subUrl = substr($url, strlen($bundle) + 11);
+                        $subUrl = substr($url, strlen($bundle) + 1);
                         $url = sprintf('/* Resource %s not found in %s */', $subUrl, $bundle);
                     } else {
                         $url = '/* missing */';

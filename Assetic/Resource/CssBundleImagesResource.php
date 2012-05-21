@@ -152,23 +152,26 @@ class CssBundleImagesResource implements ResourceInterface
         }
         
         $bundles = $this->kernel->getBundles();
+        $bundelsToScan = $this->options['bundles'];
         $files = array();
         $sourceFiles = array();
         foreach ($bundles as $bundle) {
-            $path = $bundle->getPath();
-            $dir = $path . DIRECTORY_SEPARATOR . 'Resources' . DIRECTORY_SEPARATOR . 'public';
-            if (is_dir($dir)) {
-                $finder = new Finder();
-                foreach ($finder->in($dir)->files()->name('*.css') as $file) {
-                    $currentFiles = $this->_getFilesInCss($file->getRealPath());
-                    if (!empty($currentFiles)) {
-                        $sourceFiles[] = $file->getRealPath();
-                        $files = array_merge($files, $currentFiles);
+            if (in_array($bundle->getName(), $bundelsToScan)) {
+                $path = $bundle->getPath();
+                $dir = $path . DIRECTORY_SEPARATOR . 'Resources' . DIRECTORY_SEPARATOR . 'public';
+                if (is_dir($dir)) {
+                    $finder = new Finder();
+                    foreach ($finder->in($dir)->files()->name('/.*[css|less]/') as $file) {
+                        $currentFiles = $this->_getFilesInCss($file->getRealPath());
+                        if (!empty($currentFiles)) {
+                            $sourceFiles[] = $file->getRealPath();
+                            $files = array_merge($files, $currentFiles);
+                        }
                     }
                 }
             }
         }
-        
+
         $files = array_values(array_unique($files));
         $this->files = $files;
         $this->sourceFiles = $sourceFiles;
