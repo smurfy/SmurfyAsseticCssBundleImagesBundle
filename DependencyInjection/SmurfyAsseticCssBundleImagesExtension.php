@@ -33,6 +33,11 @@ class SmurfyAsseticCssBundleImagesExtension extends Extension
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
+
+
+        if (!isset($config['filters'])) {
+            $config['filters'] = array();
+        }
         
         $container->setParameter('smurfy.assetic.output', $config['output']);
         $container->setParameter('smurfy.assetic.absolute', $config['absolute']);
