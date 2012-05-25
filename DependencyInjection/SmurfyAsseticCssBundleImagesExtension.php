@@ -34,15 +34,18 @@ class SmurfyAsseticCssBundleImagesExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-
         if (!isset($config['filters'])) {
             $config['filters'] = array();
         }
-        
+        if (!isset($config['bundles'])) {
+            $config['bundles'] = array();
+        }
+
         $container->setParameter('smurfy.assetic.output', $config['output']);
         $container->setParameter('smurfy.assetic.absolute', $config['absolute']);
         $container->setParameter('smurfy.assetic.filters', $config['filters']);
-        
+        $container->setParameter('smurfy.assetic.bundles', $config['bundles']);
+
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
     }

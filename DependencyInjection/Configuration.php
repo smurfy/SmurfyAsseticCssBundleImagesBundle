@@ -36,6 +36,8 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('output')->defaultValue('assetic/*')->end()
                 ->booleanNode('absolute')->defaultTrue()->end()
                 ->variableNode('filters')->end()
+                ->arrayNode('bundles')->prototype('scalar')->isRequired()->end()
+                ->end()
             ->end()
         ;
         return $treeBuilder;
