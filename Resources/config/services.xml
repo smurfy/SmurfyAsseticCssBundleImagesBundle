@@ -8,8 +8,9 @@
         <parameter key="smurfy.assetic.filter.cssbundleimages.class">Smurfy\AsseticCssBundleImagesBundle\Assetic\Filter\CssBundleImagesFilter</parameter>
         <parameter key="smurfy.assetic.css_formula_loader.class">Smurfy\AsseticCssBundleImagesBundle\Assetic\Loader\CssBundleImagesFormulaLoader</parameter>
         <parameter key="smurfy.assetic.css_resource.class">Smurfy\AsseticCssBundleImagesBundle\Assetic\Resource\CssBundleImagesResource</parameter>
+        <parameter key="smurfy.assetic.worker.class">Smurfy\AsseticCssBundleImagesBundle\Assetic\Worker\Worker</parameter>
     </parameters>
-    
+
     <services>
         <service id="smurfy.assetic.filter.cssbundleimages" class="%smurfy.assetic.filter.cssbundleimages.class%">
             <argument type="service" id="kernel" />
@@ -25,7 +26,7 @@
             <argument>%smurfy.assetic.filters%</argument>
             <tag name="assetic.filter" alias="cssbundleimages" />
         </service>
-        
+
         <service id="smurfy.assetic.css_formula_loader" class="%assetic.cached_formula_loader.class%" public="false">
             <tag name="assetic.formula_loader" alias="cssbundleimages" />
             <argument type="service" id="smurfy.assetic.css_formula_loader.real" />
@@ -36,7 +37,7 @@
         <service id="smurfy.assetic.css_formula_loader.real" class="%smurfy.assetic.css_formula_loader.class%" public="false">
             <argument type="service" id="assetic.asset_factory" />
         </service>
-        
+
         <service id="smurfy.assetic.css_resource" class="%smurfy.assetic.css_resource.class%" public="false">
             <tag name="assetic.formula_resource" loader="cssbundleimages" />
             <argument type="service" id="kernel" />
@@ -44,7 +45,6 @@
             <argument type="service" id="service_container" />
             <argument type="collection">
                 <argument key="root">%assetic.write_to%</argument>
-                <argument key="bundles">%smurfy.assetic.bundles%</argument>
                 <argument key="debug">%assetic.debug%</argument>
                 <argument key="output">%smurfy.assetic.output%</argument>
                 <argument key="absolute">%smurfy.assetic.absolute%</argument>

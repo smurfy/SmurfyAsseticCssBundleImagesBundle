@@ -28,15 +28,14 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        
+
         $rootNode = $treeBuilder->root('smurfy_assetic_css_bundle_images');
-        
+
         $rootNode
             ->children()
                 ->scalarNode('output')->defaultValue('assetic/*')->end()
                 ->booleanNode('absolute')->defaultTrue()->end()
                 ->variableNode('filters')->end()
-                ->arrayNode('bundles')->prototype('scalar')->isRequired()->end()
                 ->end()
             ->end()
         ;

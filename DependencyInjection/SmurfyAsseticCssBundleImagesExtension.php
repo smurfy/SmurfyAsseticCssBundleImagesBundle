@@ -23,10 +23,10 @@ class SmurfyAsseticCssBundleImagesExtension extends Extension
     /**
      * Loads all configs and adds the relevant ones to the DI container
      * Also loads the DI Services
-     * 
+     *
      * @param array            $configs   Array of Configs
      * @param ContainerBuilder $container the DI Container
-     * 
+     *
      * @return void
      */
     public function load(array $configs, ContainerBuilder $container)
@@ -37,14 +37,10 @@ class SmurfyAsseticCssBundleImagesExtension extends Extension
         if (!isset($config['filters'])) {
             $config['filters'] = array();
         }
-        if (!isset($config['bundles'])) {
-            $config['bundles'] = array();
-        }
 
         $container->setParameter('smurfy.assetic.output', $config['output']);
         $container->setParameter('smurfy.assetic.absolute', $config['absolute']);
         $container->setParameter('smurfy.assetic.filters', $config['filters']);
-        $container->setParameter('smurfy.assetic.bundles', $config['bundles']);
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
