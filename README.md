@@ -22,6 +22,40 @@ It also converts all images to assets and allows you to use an existing asset fi
 Installation
 ============
 
+Symfony 2.1.x
+-------------
+
+Add the require line to composer.json
+-------------------------------------
+
+    "require": {
+        ....
+        "smurfy/asseticcssbundleimages-bundle": "dev-master"
+        ...
+    }
+
+and update composer::
+
+    php composer.phar update
+
+Add SmurfyAsseticCssBundleImagesBundle to your application kernel
+-----------------------------------------------------------------
+
+    // app/AppKernel.php
+
+    public function registerBundles()
+    {
+        return array(
+            new Symfony\Bundle\SecurityBundle\SecurityBundle(),
+            // ...
+            new Smurfy\AsseticCssBundleImagesBundle\SmurfyAsseticCssBundleImagesBundle(),
+            // ...
+        );
+    }
+
+Symfony 2.0.x
+-------------
+
 Add SmurfyAsseticCssBundleImagesBundle to your vendor/bundles/ dir
 -------------------------------------------------------------------
 
