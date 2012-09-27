@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Assetic\Factory\AssetFactory;
 use Assetic\Factory\Resource\FileResource;
-use Symfony\Component\Routing\Router;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * The Filter itself
@@ -31,20 +31,20 @@ class CssBundleImagesFilter extends BaseCssFilter
     private $af;
     private $baseUrl;
     private $container;
-    
+
     /**
      * Constructor.
      *
      * @param KernelInterface    $kernel    The kernel is used to parse bundle notation
      * @param AssetFactory       $af        Assetic Factory
-     * @param Router             $router    The Router
+     * @param RouterInterface    $router    The Router
      * @param ContainerInterface $container The Service Container
      * @param array              $options   Options for this filter
      * @param array              $filters   Additional filters for embeded images
-     * 
+     *
      * @return void
      */
-    public function __construct(KernelInterface $kernel, $af, Router $router, ContainerInterface $container, $options = array(), $filters = array())
+    public function __construct(KernelInterface $kernel, $af, RouterInterface $router, ContainerInterface $container, $options = array(), $filters = array())
     {
         $this->kernel = $kernel;
         $this->options = $options;
@@ -53,23 +53,23 @@ class CssBundleImagesFilter extends BaseCssFilter
         $this->container = $container;
         $this->baseUrl = $router->getContext()->getBaseUrl();;
     }
-    
+
     /**
      * Overwritten sleep method, because assetics cache feature serializes this class and the embedded
      * assetFactory does not like it.
-     * 
+     *
      * @return array
      */
     public function __sleep()
     {
         return array();
     }
-    
+
     /**
      * Not in use
-     * 
+     *
      * @param AssetInterface $asset The asset
-     * 
+     *
      * @return void
      */
     public function filterLoad(AssetInterface $asset)
@@ -79,9 +79,9 @@ class CssBundleImagesFilter extends BaseCssFilter
     /**
      * Main logic is located here.
      * We parse the css here and create for all matching images a seperate asset
-     * 
+     *
      * @param AssetInterface $asset The asset
-     * 
+     *
      * @return void
      */
     public function filterDump(AssetInterface $asset)
@@ -92,12 +92,12 @@ class CssBundleImagesFilter extends BaseCssFilter
         $options = $this->options;
         $filters = $this->filters;
         $container = $this->container;
-        
+
         $content = $this->filterUrls($asset->getContent(), function($matches) use($kernel, $af, $baseUrl, $options, $filters, $container)
         {
             $url = $matches['url'];
             $file = null;
-            
+
             $fileUrl = $container->getParameterBag()->resolveValue($url);
             if ($fileUrl != $url) {
                 if ('@' == $fileUrl[0] && false !== strpos($fileUrl, '/')) {
@@ -114,13 +114,13 @@ class CssBundleImagesFilter extends BaseCssFilter
                     }
                 }
             }
-            
+
             if ('@' == $url[0] && false !== strpos($url, '/')) {
                 $bundle = substr($url, 1);
                 if (false !== $pos = strpos($bundle, '/')) {
                     $bundle = substr($bundle, 0, $pos);
                 }
-                
+
                 try {
                     $file = $kernel->locateResource($url);
                 } catch (\Exception $e) {
@@ -132,7 +132,7 @@ class CssBundleImagesFilter extends BaseCssFilter
                     }
                 }
             }
-            
+
             if (isset($file)) {
                 $ext = pathinfo($file, PATHINFO_EXTENSION);
                 $assetFilters = array();
@@ -143,7 +143,7 @@ class CssBundleImagesFilter extends BaseCssFilter
                 $path = str_replace('*', $id, $options['output']) . '.' . $ext;
                 $url = $baseUrl . ($options['absolute'] ? '/' : '') . $path;
             }
-            
+
             return str_replace($matches['url'], $url, $matches[0]);
         });
         $asset->setContent($content);
