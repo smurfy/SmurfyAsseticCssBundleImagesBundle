@@ -190,6 +190,11 @@ class CssBundleImagesResource implements ResourceInterface
         foreach ($matches['url'] as $url) {
             $file = null;
 
+            //test if url containts ? or # to filter in file detection
+            if (preg_match('/(.*)([\#\?].*)$/U', $url, $match)) {
+                $url = $match[1];
+            }
+
             $fileUrl = $this->container->getParameterBag()->resolveValue($url);
             if ($fileUrl != $url) {
                 if ('@' == $fileUrl[0] && false !== strpos($fileUrl, '/')) {

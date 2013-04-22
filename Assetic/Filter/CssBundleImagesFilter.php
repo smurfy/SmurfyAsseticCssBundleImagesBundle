@@ -96,7 +96,14 @@ class CssBundleImagesFilter extends BaseCssFilter
         $content = $this->filterUrls($asset->getContent(), function($matches) use($kernel, $af, $baseUrl, $options, $filters, $container)
         {
             $url = $matches['url'];
+            $urlSuffix = '';
             $file = null;
+
+            //test if url containts ? or # to filter in file detection
+            if (preg_match('/(.*)([\#\?].*)$/U', $url, $match)) {
+                $url = $match[1];
+                $urlSuffix = $match[2];
+            }
 
             $fileUrl = $container->getParameterBag()->resolveValue($url);
             if ($fileUrl != $url) {
@@ -141,7 +148,7 @@ class CssBundleImagesFilter extends BaseCssFilter
                 }
                 $id = $af->generateAssetName($file, $assetFilters, $options);
                 $path = str_replace('*', $id, $options['output']) . '.' . $ext;
-                $url = $baseUrl . ($options['absolute'] ? '/' : '') . $path;
+                $url = $baseUrl . ($options['absolute'] ? '/' : '') . $path . $urlSuffix;
             }
 
             return str_replace($matches['url'], $url, $matches[0]);
