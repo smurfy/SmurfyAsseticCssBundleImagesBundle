@@ -142,8 +142,11 @@ class CssBundleImagesFilter extends BaseCssFilter
 
             if (isset($file)) {
                 $ext = pathinfo($file, PATHINFO_EXTENSION);
+                $fname = pathinfo($file, PATHINFO_BASENAME);
                 $assetFilters = array();
-                if (isset($filters[$ext])) {
+                if (isset($filters[$fname])) {
+                    $assetFilters = $filters[$fname];
+                } else if (isset($filters[$ext])) {
                     $assetFilters = $filters[$ext];
                 }
                 $id = $af->generateAssetName($file, $assetFilters, $options);

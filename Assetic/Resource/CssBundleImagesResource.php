@@ -109,8 +109,11 @@ class CssBundleImagesResource implements ResourceInterface
         $formulas = array();
         foreach ($files as $file) {
             $ext = pathinfo($file, PATHINFO_EXTENSION);
+            $fname = pathinfo($file, PATHINFO_BASENAME);
             $assetFilters = array();
-            if (isset($filters[$ext])) {
+            if (isset($filters[$fname])) {
+                $assetFilters = $filters[$fname];
+            } else if (isset($filters[$ext])) {
                 $assetFilters = $filters[$ext];
             }
             $id = $this->af->generateAssetName($file, $assetFilters, $options);
