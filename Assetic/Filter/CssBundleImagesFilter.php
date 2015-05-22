@@ -105,6 +105,10 @@ class CssBundleImagesFilter extends BaseCssFilter
                 $urlSuffix = $match[2];
             }
 
+            if ($options['less_url_rewrite_workaround'] === true && substr($url, 0, 2) == '/@') {
+                $url = substr($url, 1);
+            }
+
             $fileUrl = $container->getParameterBag()->resolveValue($url);
             if ($fileUrl != $url) {
                 if ('@' == $fileUrl[0] && false !== strpos($fileUrl, '/')) {

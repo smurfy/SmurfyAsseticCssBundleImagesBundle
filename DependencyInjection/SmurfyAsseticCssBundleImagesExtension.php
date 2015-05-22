@@ -41,6 +41,7 @@ class SmurfyAsseticCssBundleImagesExtension extends Extension
         $container->setParameter('smurfy.assetic.output', $config['output']);
         $container->setParameter('smurfy.assetic.absolute', $config['absolute']);
         $container->setParameter('smurfy.assetic.filters', $config['filters']);
+        $container->setParameter('smurfy.assetic.less_url_rewrite_workaround', $config['lessUrlRewriteWorkaround']);
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');

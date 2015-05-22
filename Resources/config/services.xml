@@ -22,6 +22,7 @@
                 <argument key="debug">%assetic.debug%</argument>
                 <argument key="output">%smurfy.assetic.output%</argument>
                 <argument key="absolute">%smurfy.assetic.absolute%</argument>
+                <argument key="less_url_rewrite_workaround">%smurfy.assetic.less_url_rewrite_workaround%</argument>
             </argument>
             <argument>%smurfy.assetic.filters%</argument>
             <tag name="assetic.filter" alias="cssbundleimages" />
@@ -48,6 +49,7 @@
                 <argument key="debug">%assetic.debug%</argument>
                 <argument key="output">%smurfy.assetic.output%</argument>
                 <argument key="absolute">%smurfy.assetic.absolute%</argument>
+                <argument key="less_url_rewrite_workaround">%smurfy.assetic.less_url_rewrite_workaround%</argument>
             </argument>
             <argument>%smurfy.assetic.filters%</argument>
         </service>

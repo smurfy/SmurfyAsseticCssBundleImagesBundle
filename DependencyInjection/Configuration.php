@@ -35,6 +35,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('output')->defaultValue('assetic/*')->end()
                 ->booleanNode('absolute')->defaultTrue()->end()
+                ->booleanNode('lessUrlRewriteWorkaround')->defaultFalse()->end()
                 ->variableNode('filters')->end()
                 ->end()
             ->end()

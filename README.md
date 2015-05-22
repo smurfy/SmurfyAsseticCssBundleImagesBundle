@@ -101,6 +101,7 @@ By default the filter outputs all files to /assetic/ but you can change that, al
     smurfy_assetic_css_bundle_images:
         output: assetic/*
         absolute: true
+        lessUrlRewriteWorkaround: false
         filters:
             png:
                 - optipng
@@ -123,9 +124,25 @@ After that you can use inside your css file something like that:
     .body {
         background: url(@MyBundle/Resources/public/images/backgrounds.png);
     }
+
+LESS Support
+============
+
+Less is fully supported. Just make sure you load the less filter before the ```cssbundleimages``` filter.
+
+Be aware, that less does url rewrites of "url" tags if you import other less files in subdirectories and the url tag uses relative aka not beginning with / urls.
+After that the ```cssbundleimages``` filter does no longer work, because the url not longer begins with ```@BundleName``` but with ```subdirectory/@BundleName```.
+There is the ```lessUrlRewriteWorkaround``` config parameter which allows you to use ```/@BundleName```.
+
+    .body {
+        background: url(/@MyBundle/Resources/public/images/backgrounds.png);
+    }
+
+This way less does no url rewrites, because it detects the url as absolute.
     
 Final Notes
 ===========
 
 Assetic Controller support is working but it always rescans all css files which of course is not so fast.
+It is recommended to use ```assetic:watch``` (```assetic:dump --watch``` on old versions of assetic bundle)
 For my Project its ok but it could be a bottleneck in a large development environment.

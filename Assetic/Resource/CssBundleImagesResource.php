@@ -198,7 +198,12 @@ class CssBundleImagesResource implements ResourceInterface
                 $url = $match[1];
             }
 
+            if ($this->options['less_url_rewrite_workaround'] === true && substr($url, 0, 2) == '/@') {
+                $url = substr($url, 1);
+            }
+
             $fileUrl = $this->container->getParameterBag()->resolveValue($url);
+
             if ($fileUrl != $url) {
                 if ('@' == $fileUrl[0] && false !== strpos($fileUrl, '/')) {
                     $url = $fileUrl;
@@ -210,10 +215,6 @@ class CssBundleImagesResource implements ResourceInterface
             }
 
             if ('@' == $url[0] && false !== strpos($url, '/')) {
-                $bundle = substr($url, 1);
-                if (false !== $pos = strpos($bundle, '/')) {
-                    $bundle = substr($bundle, 0, $pos);
-                }
                 try {
                     $file = $this->kernel->locateResource($url);
                 } catch (\Exception $e) {
