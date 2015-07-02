@@ -111,7 +111,7 @@ class CssBundleImagesFilter extends BaseCssFilter
 
             $fileUrl = $container->getParameterBag()->resolveValue($url);
             if ($fileUrl != $url) {
-                if ('@' == $fileUrl[0] && false !== strpos($fileUrl, '/')) {
+                if (isset($fileUrl[0]) && '@' == $fileUrl[0] && false !== strpos($fileUrl, '/')) {
                     $url = $fileUrl;
                 } else {
                     if (file_exists($fileUrl)) {
@@ -126,7 +126,7 @@ class CssBundleImagesFilter extends BaseCssFilter
                 }
             }
 
-            if ('@' == $url[0] && false !== strpos($url, '/')) {
+            if (isset($url[0]) && '@' == $url[0] && false !== strpos($url, '/')) {
                 $bundle = substr($url, 1);
                 if (false !== $pos = strpos($bundle, '/')) {
                     $bundle = substr($bundle, 0, $pos);

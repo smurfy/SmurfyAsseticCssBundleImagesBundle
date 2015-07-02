@@ -214,7 +214,7 @@ class CssBundleImagesResource implements ResourceInterface
                 }
             }
 
-            if ('@' == $url[0] && false !== strpos($url, '/')) {
+            if (isset($url[0]) && '@' == $url[0] && false !== strpos($url, '/')) {
                 try {
                     $file = $this->kernel->locateResource($url);
                 } catch (\Exception $e) {
