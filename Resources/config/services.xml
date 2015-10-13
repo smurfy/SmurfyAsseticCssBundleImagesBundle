@@ -39,8 +39,7 @@
             <argument type="service" id="assetic.asset_factory" />
         </service>
 
-        <service id="smurfy.assetic.css_resource" class="%smurfy.assetic.css_resource.class%" public="false">
-            <tag name="assetic.formula_resource" loader="cssbundleimages" />
+        <service id="smurfy.assetic.css_resource" class="%smurfy.assetic.css_resource.class%" public="false" abstract="true">
             <argument type="service" id="kernel" />
             <argument type="service" id="assetic.asset_factory" />
             <argument type="service" id="service_container" />
